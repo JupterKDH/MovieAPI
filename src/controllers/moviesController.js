@@ -12,7 +12,7 @@ class MoviesController{
       throw new AppError("A nota deve ser entre 0 e 5");
     }
 
-    const [ movie_id ] = await knex("movie_notes").insert({
+    const [ movie_id ] = await knex("movies").insert({
       title,
       description,
       user_id,
@@ -35,7 +35,7 @@ class MoviesController{
   async show(request, response) {
     const {id} = request.params;
 
-    const movie = await knex("movie_notes").where({ id}).first();
+    const movie = await knex("movies").where({ id}).first();
     const tags = await knex("movie_tags").where({movie_id: id}).orderBy("name");
    
     return response.json({
@@ -47,7 +47,7 @@ class MoviesController{
   async delete(request, response) {
     const {id} = request.params;
 
-    await knex("movie_notes").where({id}).delete();
+    await knex("movies").where({id}).delete();
 
     return response.json();
   }
@@ -64,19 +64,19 @@ class MoviesController{
     
       movies = await knex("movie_tags")
         .select([
-          "movie_notes.id",
-          "movie_notes.title",
-          "movie_notes.user_id",
+          "movies.id",
+          "movies.title",
+          "movies.user_id",
         ])
-        .where("movie_notes.user_id", user_id)
-        .whereLike("movie_notes.title", `%${title}%`)
+        .where("movies.user_id", user_id)
+        .whereLike("movies.title", `%${title}%`)
         .whereIn("name", filterTags)
-        .innerJoin("movie_notes", "movie_notes.id", "movie_tags.movies_id")
-        .groupBy("movie_notes.id")
-        .orderBy("movie_notes.title")
+        .innerJoin("movies", "movie.id", "movie_tags.movie_id")
+        .groupBy("movies.id")
+        .orderBy("movies.title")
 
     } else {
-      movies = await knex("movie_notes")
+      movies = await knex("movies")
       .where({ user_id})
       .whereLike("title", `%${title}%`)
       .orderBy("title");
@@ -99,3 +99,4 @@ class MoviesController{
 }
 
 module.exports = MoviesController;
+

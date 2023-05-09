@@ -67,7 +67,7 @@ class UsersController {
       password = ?,
       updated_at = DATETIME('now', 'localtime')
       WHERE id = ?`,
-      [user.name, user.email, user.password, id]
+      [user.name, user.email, user.password, user.id]
     );
 
     return response.json();

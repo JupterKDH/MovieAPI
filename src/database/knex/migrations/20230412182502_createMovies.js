@@ -1,5 +1,5 @@
 
-exports.up =  knex => knex.schema.createTable("movie_notes", table => {
+exports.up =  knex => knex.schema.createTable("movies", table => {
   table.increments("id");
   table.text("title");
   table.text("description");
@@ -11,4 +11,4 @@ exports.up =  knex => knex.schema.createTable("movie_notes", table => {
 });
 
 
-exports.down = knex => knex.schema.dropTable("movie_notes");
+exports.down = knex => knex.schema.dropTable("movies");
